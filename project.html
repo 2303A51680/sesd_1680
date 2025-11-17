@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SR University Student Portal: Quick access to departments, events, and contacts.">
+    <title> SR University</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230b5d7d'/><text x='50' y='65' font-family='Arial' font-size='50' fill='white' text-anchor='middle'>SR</text></svg>">
+
+    <style>
+        /* --- CSS VARIABLES --- */
+        /* Updated Brand Colors */
+        :root {
+            --primary-color: #0b5d7d; /* Teal/Blue brand color */
+            --secondary-color: #f4f7f9; /* Light cool gray background */
+            --accent-color: #ffb703; /* Yellow/Gold accent */
+            --text-dark: #222;
+            --text-light: #555;
+            --white: #ffffff;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.08);
+        }
+
+        /* --- RESET & BASIC TYPOGRAPHY --- */
+        * {
+            box-sizing: border-box; /* Include padding/border in element width */
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--secondary-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #003d52; /* Darker shade of primary on hover */
+            text-decoration: underline;
+        }
+
+        /* --- HEADER SECTION --- */
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            border-bottom: 5px solid var(--accent-color); /* Brand accent stripe */
+        }
+
+        .brand h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .brand span {
+            color: var(--accent-color); /* Highlight 'Connect' in Yellow */
+        }
+
+        .tagline {
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0.9;
+            max-width: 400px;
+            text-align: right;
+        }
+
+        /* --- MAIN LAYOUT (GRID) --- */
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 2.5fr 1fr; /* Left - Center - Right */
+            gap: 20px;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* --- SHARED CARD STYLING --- */
+        .card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border-top: 3px solid transparent; /* Reserve space for hover effect */
+            transition: border-top-color 0.3s;
+        }
+
+        .card:hover {
+            border-top-color: var(--accent-color); /* Yellow top border on hover */
+        }
+
+        .section-title {
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        /* --- LEFT COLUMN: DEPARTMENTS --- */
+        .dept-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .dept-item:last-child {
+            border-bottom: none;
+        }
+
+        .hod-name {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* --- CENTER COLUMN: EVENTS --- */
+        .event-card {
+            border-left: 5px solid var(--accent-color); /* Yellow stripe brand identifier */
+            background: #fafafa;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        }
+
+        .event-card:hover {
+            transform: translateY(-3px);
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .event-date {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--primary-color); /* Using Primary for readability */
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: inline-block;
+            background: #eef6f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .event-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Button styling */
+        #load-event-btn {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        #load-event-btn:hover {
+            background-color: #08465e; /* Darker Teal */
+            color: var(--accent-color);
+        }
+
+        /* --- RIGHT COLUMN: SIDEBAR --- */
+        .quick-links ul {
+            list-style: none;
+        }
+
+        .quick-links li {
+            margin-bottom: 10px;
+        }
+
+        .quick-links a {
+            display: block;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .quick-links a:hover {
+            background: #e9ecef;
+            border-left-color: var(--accent-color);
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .social-links {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .social-badge {
+            background: var(--primary-color);
+            color: white;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .social-badge:hover {
+            background: var(--accent-color);
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            background: var(--primary-color);
+            color: var(--white);
+            font-size: 0.9rem;
+            border-top: 5px solid var(--accent-color);
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr; /* Stack columns */
+            }
+            
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .tagline {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header role="banner">
+        <div class="brand">
+            <h1>SR <span>Connect</span></h1>
+        </div>
+        <div class="tagline">Quick access to departments, events, and contacts — SR University</div>
+    </header>
+
+    <main class="container">
+        
+        <aside id="left-sidebar" aria-label="Departments List">
+            <div class="card">
+                <h2 class="section-title">Departments</h2>
+                
+                <div class="dept-item">
+                    <a href="#"><strong>Computer Science</strong></a>
+                    <span class="hod-name">HOD: Dr. A. Gupta</span>
+                </div>
+
+                <div class="dept-item">
+                    <a href="#"><strong>Electronics & Comm.</strong></a>
+                    <span class="hod-name">HOD: Prof. R. Reddy</span>
+                </div>
+
+                <div class="dept-item">
+                    <a href="#"><strong>Management Studies</strong></a>
+                    <span class="hod-name">HOD: Dr. M. Kaur</span>
+                </div>
+
+                <div class="dept-item">
+                    <a href="#"><strong>Mathematics</strong></a>
+                    <span class="hod-name">HOD: Prof. S. Iyer</span>
+                </div>
+            </div>
+        </aside>
+
+        <section id="main-content" aria-label="Upcoming Events">
+            <div class="card">
+                <h2 class="section-title">Upcoming Events</h2>
+                
+                <div id="events-container">
+                    <article class="event-card">
+                        <div class="event-date">24 Nov, 2025</div>
+                        <h3 class="event-title">AI Innovation Summit</h3>
+                        <p>Main Auditorium. Keynote speakers from leading tech firms discuss the future of generative AI.</p>
+                    </article>
+
+                    <article class="event-card">
+                        <div class="event-date">12 Dec, 2025</div>
+                        <h3 class="event-title">Winter Cultural Fest</h3>
+                        <p>University Grounds. A celebration of music, dance, and art. Open to all students and faculty.</p>
+                    </article>
+
+                    <article class="event-card">
+                        <div class="event-date">15 Jan, 2026</div>
+                        <h3 class="event-title">Spring Semester Orientation</h3>
+                        <p>Lecture Hall A. Mandatory session for all incoming freshmen and transfer students.</p>
+                    </article>
+                </div>
+
+                <button id="load-event-btn" onclick="addEvent()">Load More Events</button>
+            </div>
+        </section>
+
+        <aside id="right-sidebar" aria-label="Sidebar Info">
+            
+            <div class="card quick-links">
+                <h2 class="section-title">Quick Links</h2>
+                <nav>
+                    <ul>
+                        <li><a href="#">📅 Academic Calendar</a></li>
+                        <li><a href="#">📝 Exam Schedules</a></li>
+                        <li><a href="#">💼 Placements</a></li>
+                        <li><a href="#">📚 Central Library</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="card contact-info">
+                <h2 class="section-title">Contact Us</h2>
+                <p><strong>Email:</strong> helpdesk@sr.edu</p>
+                <p><strong>Phone:</strong> +91 987-654-3210</p>
+                <p><strong>Helpdesk:</strong> Block B, G-Floor</p>
+                
+                <div class="social-links">
+                    <a href="#" class="social-badge" aria-label="Facebook">fb</a>
+                    <a href="#" class="social-badge" aria-label="Twitter">tw</a>
+                    <a href="#" class="social-badge" aria-label="LinkedIn">in</a>
+                </div>
+            </div>
+
+        </aside>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SR University. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to add a late January event dynamically
+        function addEvent() {
+            const container = document.getElementById('events-container');
+            const newEvent = document.createElement('article');
+            newEvent.className = 'event-card';
+            
+            // Set content with a late January date
+            newEvent.innerHTML = `
+                <div class="event-date">28 Jan, 2026</div>
+                <h3 class="event-title">Republic Day Honors</h3>
+                <p>Flag hoisting ceremony and awards distribution for academic excellence.</p>
+            `;
+            
+            container.appendChild(newEvent);
+            
+            // Disable the button visually and functionally
+            const btn = document.getElementById('load-event-btn');
+            btn.innerText = "All Events Loaded";
+            btn.disabled = true;
+            btn.style.background = "#ccc";
+            btn.style.color = "#666";
+            btn.style.cursor = "default";
+        }
+    </script>
+
+</body>
+</html>
